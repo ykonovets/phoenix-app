@@ -44,6 +44,7 @@ defmodule PhoenixBlog.User do
     model
     |> cast(params, ~w(first_name last_name email password password_confirmation))
     |> validate_confirmation(:password)
+    |> unique_constraint(:email)
     |> set_password_hash
   end
 
