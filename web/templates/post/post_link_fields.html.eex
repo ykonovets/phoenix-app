@@ -1,0 +1,23 @@
+<%= inputs_for @f, :post_links, fn e -> %>
+  <tr>
+    <td>
+      <div class="form-group">
+        <%= text_input e, :title %>
+        <%= error_tag e, :title %>
+      </div>
+    </td>
+    <td>
+      <div class="form-group">
+        <%= text_input e, :link %>
+        <%= error_tag e, :link %>
+      </div>
+    </td>
+    <td class="text-center">
+      <div class="form-group">
+        <%= hidden_input e, :id, class: "js-id-field" %>
+        <%= hidden_input e, :_destroy, class: "js-destroy-field" %>
+        <%= link "Delete", to: "#", class: "js-delete-link-button" %>
+      </div>
+    </td>
+  </tr>
+<% end %>

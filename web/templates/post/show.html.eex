@@ -1,0 +1,42 @@
+<h2>Show post</h2>
+
+<h3><%= @conn.assigns.post.title %></h3>
+<p>
+  <i><%= @conn.assigns.post.text %></i>
+</p>
+<h4>Links</h4>
+<ul>
+  <%= for link <- @conn.assigns.post.post_links do %>
+    <li><%= link link.title, to: link.link %></li>
+  <% end %>
+</ul>
+<table class="table js-comments-table">
+  <thead>
+    <tr>
+      <th>Text</th>
+      <th>Author</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for comment <- @conn.assigns.post.comments do %>
+        <tr>
+          <td><%= comment.text %></td>
+          <td><%= PhoenixBlog.User.full_name(comment.author) %></td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="well">
+  <legend>New Comment</legend>
+  <%= form_for @comment_changeset, post_comment_path(@conn, :create, @post), fn f -> %>
+    <div class="form-group">
+      <%= text_input f, :text, class: "form-control" %>
+      <%= error_tag f, :text %>
+    </div>
+
+    <div class="form-group text-right">
+      <%= submit "Submit", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
