@@ -1,3 +1,4 @@
+<%= hidden_input(:form, :post_id, value: @conn.assigns.post.id, class: "js-post-id") %>
 <h2>Show post</h2>
 
 <h3><%= @conn.assigns.post.title %></h3>
@@ -27,9 +28,11 @@
   </tbody>
 </table>
 
+<div class="alert alert-success js-new-post-alert hidden" role="alert">New comment received</div>
+
 <div class="well">
   <legend>New Comment</legend>
-  <%= form_for @comment_changeset, post_comment_path(@conn, :create, @post), fn f -> %>
+  <%= form_for @comment_changeset, post_comment_path(@conn, :create, @post), [class: "js-comment-form"], fn f -> %>
     <div class="form-group">
       <%= text_input f, :text, class: "form-control" %>
       <%= error_tag f, :text %>

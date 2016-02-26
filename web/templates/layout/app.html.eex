@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
-  <body>
+  <body class=<%= @conn.assigns[:body_class] %>>
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">

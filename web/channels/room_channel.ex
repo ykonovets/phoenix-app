@@ -4,9 +4,13 @@ defmodule PhoenixBlog.RoomChannel do
 
   alias PhoenixBlog.User
 
-  def join(_room, %{"guardian_token" => token}, socket) do
+  intercept ["comment:created"]
+
+  def join(_room, %{"guardian_token" => token, "post_id" => post_id}, socket) do
     case sign_in(socket, token) do
       {:ok, authed_socket, _guardian_params} ->
+        {post_id, _} =  Integer.parse(post_id)
+        authed_socket = assign(authed_socket, :post_id, post_id)
         send(self, {:after_join, current_resource(authed_socket)})
         {:ok, authed_socket}
       {:error, reason} ->
@@ -19,18 +23,18 @@ defmodule PhoenixBlog.RoomChannel do
   end
 
   def handle_info({:after_join, user}, socket) do
-      push socket, "joined", %{}
-      broadcast!(socket, "user:connected", %{name: User.full_name(user)})
+    push socket, "joined", %{}
+    broadcast!(socket, "user:connected", %{name: User.full_name(user)})
+    {:noreply, socket}
+  end
+
+  def handle_out("comment:created", comment, socket) do
+    user = Guardian.Phoenix.Socket.current_resource(socket)
+    if comment.post_id == socket.assigns.post_id do
+      push socket, "comment:created", %{ author: User.full_name(comment.author), text: comment.text}
+      {:noreply, socket}
+    else
       {:noreply, socket}
     end
-
-  def broadcast_change(toy) do
-    payload = %{
-      "name" => toy.name,
-      "color" => toy.color,
-      "age" => toy.age,
-      "id" => toy.id
-    }
-    broadcast!("toys:#{toy.id}", "change", payload)
   end
 end
