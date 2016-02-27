@@ -9,7 +9,7 @@ defimpl Canada.Can, for: User do
     when action in [:edit, :update, :delete], do: true
 
   def can?(%User{}, action, User) when action in [:index, :new, :create], do: true
-  def can?(%User{}, action, %User{}) when action in [:show, :edit, :delete], do: true
+  def can?(%User{}, action, %User{}) when action in [:show, :edit, :update, :delete], do: true
 
   def can?(%User{}, :create, Comment), do: true
 

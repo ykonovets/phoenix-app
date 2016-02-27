@@ -1,5 +1,8 @@
+require IEx
+
 defmodule PhoenixBlog.User do
   use PhoenixBlog.Web, :model
+  alias PhoenixBlog.Repo
 
   schema "users" do
     field :first_name, :string
@@ -44,6 +47,7 @@ defmodule PhoenixBlog.User do
     model
     |> cast(params, ~w(first_name last_name email password password_confirmation))
     |> validate_confirmation(:password)
+    |> validate_uniqueness(:email)
     |> unique_constraint(:email)
     |> set_password_hash
   end
@@ -72,6 +76,19 @@ defmodule PhoenixBlog.User do
   defp validate_password(changeset, crypted) do
     password = Ecto.Changeset.get_change(changeset, :password)
     if valid_password?(password, crypted), do: changeset, else: password_incorrect_error(changeset)
+  end
+
+  defp validate_uniqueness(changeset, field) do
+    case get_change(changeset, field) do
+      nil ->
+        changeset
+      field_value ->
+        if Repo.get_by(PhoenixBlog.User, %{field => field_value}) do
+          Ecto.Changeset.add_error(changeset, field, "is already in use")
+        else
+          changeset
+        end
+    end
   end
 
   defp password_incorrect_error(changeset), do: Ecto.Changeset.add_error(changeset, :password, "is incorrect")
