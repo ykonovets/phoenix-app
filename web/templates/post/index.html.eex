@@ -19,10 +19,10 @@
 
           <td class="text-right">
             <%= link "Show", to: post_path(@conn, :show, post), class: "btn btn-default btn-xs" %>
-            <%= if @conn.assigns.current_user |> Canada.can? edit(post) do %>
+            <%= if @conn.assigns.current_user |> Canada.can?(edit(post)) do %>
               <%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-default btn-xs" %>
             <% end %>
-            <%= if @conn.assigns.current_user |> Canada.can? delete(post) do %>
+            <%= if @conn.assigns.current_user |> Canada.can?(delete(post)) do %>
               <%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
             <% end %>
           </td>

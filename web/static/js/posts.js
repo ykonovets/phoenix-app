@@ -42,6 +42,7 @@ class PostShowPage {
     this.page = $('.post-show-page');
     this.newPostAlert = this.page.find('.js-new-post-alert')
     this.commentsTable = this.page.find('.js-comments-table');
+    this.commentsForm = this.page.find('.js-comment-form');
   }
 
   run() {
@@ -49,9 +50,25 @@ class PostShowPage {
       return;
     }
     $(document).on("comment:created", this.onCommentCreated.bind(this))
+    this.commentsForm.on("submit", this.onCommentSubmit.bind(this))
   }
 
-  onCommentCreated(e, comment) {
+  onCommentSubmit(e, t) {
+    let form = $(e.target);
+    let formValues = form.serialize();
+    $.ajax({
+      method: form.prop('method'),
+      url: form.prop('action'),
+      dataType: 'json',
+      data: formValues,
+      success: function (response) {
+        debugger;
+      }
+    })
+    return false;
+  }
+
+  onCommentCreated(e) {
     let textTd = $("<td>").append(comment.text)
     let authorTd = $("<td>").append(comment.author)
     this.commentsTable.append($("<tr>").append(textTd, authorTd))

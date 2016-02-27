@@ -32,7 +32,7 @@
 
 <div class="well">
   <legend>New Comment</legend>
-  <%= form_for @comment_changeset, post_comment_path(@conn, :create, @post), [class: "js-comment-form"], fn f -> %>
+  <%= form_for @comment_changeset, comment_path(@conn, :create, @post), [class: "js-comment-form"], fn f -> %>
     <div class="form-group">
       <%= text_input f, :text, class: "form-control" %>
       <%= error_tag f, :text %>
