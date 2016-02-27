@@ -1,7 +1,6 @@
 defmodule PhoenixBlog.Post do
   use PhoenixBlog.Web, :model
 
-  @derive {Poison.Encoder, only: [:title, :text]}
   schema "posts" do
     field :title, :string
     field :text, :string

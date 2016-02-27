@@ -34,16 +34,8 @@ defmodule PhoenixBlog.Router do
   scope "/", PhoenixBlog do
     pipe_through [:browser, :browser_auth] # Use the default browser stack
     resources "/posts", PostController
-    # resources "/posts", PostController do
-    #   resources "/comments", CommentController
-    # end
     resources "/users", UserController
     resources "/sessions", SessionController, singleton: true
     get "/", PostController, :index, as: :root
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", PhoenixBlog do
-  #   pipe_through :api
-  # end
 end

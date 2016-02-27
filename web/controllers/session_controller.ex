@@ -7,13 +7,6 @@ defmodule PhoenixBlog.SessionController do
     conn
     |> put_flash(:error, "You are not authorized to perform this action")
     |> redirect(to: root_path(conn, :index))
-    |> halt
-  end
-
-  def unauthenticated(conn, _params) do
-    conn
-    |> put_flash(:error, "You have to sign in")
-    |> redirect(to: session_path(conn, :new))
   end
 
   def new(conn, _params) do

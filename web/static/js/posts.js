@@ -55,20 +55,25 @@ class PostShowPage {
 
   onCommentSubmit(e, t) {
     let form = $(e.target);
-    let formValues = form.serialize();
     $.ajax({
       method: form.prop('method'),
       url: form.prop('action'),
-      dataType: 'json',
-      data: formValues,
+      data:  form.serialize(),
       success: function (response) {
-        debugger;
+        form[0].reset();
+        form.find('.error-message').remove();
+      },
+      error: function (response) {
+        $.each(response.responseJSON.errors, function(field_name, error_text) {
+          let input = form.find(`input[name='comment[${field_name}]']`)
+          $("<span class='text-danger error-message'>").append(error_text).insertAfter(input);
+        })
       }
     })
     return false;
   }
 
-  onCommentCreated(e) {
+  onCommentCreated(e, comment) {
     let textTd = $("<td>").append(comment.text)
     let authorTd = $("<td>").append(comment.author)
     this.commentsTable.append($("<tr>").append(textTd, authorTd))
