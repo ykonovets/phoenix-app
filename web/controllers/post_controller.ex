@@ -15,7 +15,7 @@ defmodule PhoenixBlog.PostController do
 
   def new(conn, _params, current_user, claims) do
     changeset = Post.create_changeset(%Post{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, body_class: "post-add-edit-page")
   end
 
   def create(conn, %{"post" => post_params}, current_user, claims) do
