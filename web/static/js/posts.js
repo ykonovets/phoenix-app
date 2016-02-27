@@ -24,8 +24,7 @@ class PostForm {
   setDeleteListeners(node) {
     node.find(".js-delete-link-button").on("click", function (e) {
       let tr = $(this).parents("tr");
-      let id = tr.find(".js-id-field").val();
-      if (id == "") {
+      if (tr.find(".js-id-field").val() == "") {
         tr.remove();
       }
       else {
@@ -50,18 +49,18 @@ class PostShowPage {
       return;
     }
     $(document).on("comment:created", this.onCommentCreated.bind(this))
-    this.commentsForm.on("submit", this.onCommentSubmit.bind(this))
+    this.commentsForm.on("submit", this.onCommentSubmited.bind(this))
   }
 
-  onCommentSubmit(e, t) {
+  onCommentSubmited(e) {
     let form = $(e.target);
     $.ajax({
       method: form.prop('method'),
       url: form.prop('action'),
-      data:  form.serialize(),
+      data: form.serialize(),
+      beforeSend: () => { form.find('.error-message').remove(); },
       success: function (response) {
         form[0].reset();
-        form.find('.error-message').remove();
       },
       error: function (response) {
         $.each(response.responseJSON.errors, function(field_name, error_text) {

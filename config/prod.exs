@@ -14,7 +14,8 @@ use Mix.Config
 config :phoenix_blog, PhoenixBlog.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/manifest.json"
+  cache_static_manifest: "priv/static/manifest.json",
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -62,4 +63,12 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+
+config :phoenix_blog, PhoenixBlog.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: System.get_env("DATABASE_URL"),
+  size: 20 # The amount of database connections in the pool
+  # username: "n2",
+  # password: "",
+  # database: "phoenix_blog_prod",
+  # pool_size: 20
